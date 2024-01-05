@@ -1,0 +1,66 @@
+.container {
+    margin-top: 60px;
+    background-color: var(--bg-grey);
+    min-height: 100%;
+}
+
+.header {
+    background: var(--nav-bg);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 64px;
+    padding-bottom: 120px;
+}
+
+.header h6 {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.header h2 {
+    font-size: 32px;
+    font-weight: 400;
+}
+
+.amountInfoCards {
+    padding: 0 64px;
+    display: flex;
+    justify-content:stretch;
+    gap: 24px;
+    align-items: center;
+    margin-top: -55px;
+}
+
+.amountInfoCards>div {
+    width: 24%;
+}
+
+.detailSection {
+    display: flex;
+    padding: 24px 64px;
+    gap: 18px;
+}
+
+.activeLoanSection>h3 {
+    font-size: 20px;
+    font-weight: 600;
+    padding: 12px 64px;
+}
+
+.loanAccCards {
+    overflow: auto;
+    padding-bottom: 24px;
+    padding-left: 64px;
+    white-space: nowrap;
+    position: relative;
+}
+
+.loanAccCards>div {
+    display: inline-block;
+    width: 400px;
+    margin-right: 30px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}

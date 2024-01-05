@@ -1,241 +1,305 @@
-import './agree.css';
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Link } from 'react-router-dom';
-import { Button, Modal } from '@mui/material';
-import upload from '../../images/Upload-icon.png';
-import download from '../../images/doc_download.png';
-import SignatureCanvas from 'react-signature-canvas'
-import wallet from '../../images/wallet.png';
-import card from '../../images/card-icons.png';
-import Status from '../../images/Status icon.png'
-import applepay from '../../images/ApplePay.png'
-import check from '../../images/checks.png'
-      
+import { Checkbox, IconButton, Modal } from "@mui/material";
+import FormScafold from "../../../components/form_scafold/form_scafold";
+import FormSection from "../../../components/form_section/form_section";
+import classes from "./agree.module.css";
+import DocumentViewer from "../../../components/document_veiwer/document_veiwer";
+import TextInput from "../../../components/text_input/text_input";
+import wallet from "../../../assets/images/wallet.png";
+import card from "../../../assets/images/card-icons.png";
+import applepay from "../../../assets/images/ApplePay.png";
+import PaymentSelect from "../../../components/payment_select/payment_select";
+import { applyForOptions } from "../loan/loan";
+
+const summeryData = [
+  {
+    title: "Convenance",
+    amount: "8,000",
+    currency: "AED",
+  },
+  {
+    title: "Broker Commission",
+    amount: "8,000",
+    currency: "AED",
+  },
+  {
+    title: "Dubai land department fee",
+    amount: "8,000",
+    currency: "AED",
+  },
+  {
+    title: "Mortgage Processing",
+    amount: "8,000",
+    currency: "AED",
+  },
+  {
+    title: "Registration Fee",
+    amount: "8,000",
+    currency: "AED",
+  },
+  {
+    title: "Valuation",
+    amount: "8,000",
+    currency: "AED",
+  },
+];
+
+const paymentOptions = [
+  {
+    value: "1",
+    type: "wallet",
+    title: "Wallet",
+    isValid: true,
+    balance: "12,076.63 AED",
+    icon: wallet,
+  },
+  {
+    value: "2",
+    type: "master",
+    title: "xxxx-4455",
+    isValid: true,
+    subTitle: "Expired on 05/26",
+    icon: card,
+  },
+  {
+    value: "3",
+    type: "master",
+    title: "xxxx-5672",
+    isValid: false,
+    subTitle: "Expired on 05/21",
+    icon: card,
+  },
+  {
+    value: "4",
+    type: "apple",
+    title: "Apple Pay",
+    isValid: true,
+    icon: applepay,
+  },
+];
 
 export default function Agreement() {
-    
-    const [contentList, setContentList] = useState([
-        {
-          id: 1,
-          isVisible: true,
-        },
-      ]);
-      const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState("1");
+  const [showAddCardForm, setShowAddCardForm] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [formData, setFormData] = useState({});
 
-      const handleOpen = () => {
-        setOpen(true);
-      };
-    
-      const handleClose = () => {
-        setOpen(false);
-        // window.location.href = 'profiledetail';
-      };
+  const navigate = useNavigate();
 
-      const handleScroll = () => {
-        window.scrollTo(0, 0);
-    }
+  const hadnleSubmit = () => {
+    setIsLoading(true);
+    const data = JSON.parse(localStorage.getItem("CURRENT_APPLICATION"));
+    data.agree = formData;
+    const allData = JSON.parse(localStorage.getItem("ALL_APPLICATIONS")) || [];
+    const date = new Date();
+    allData.push({
+      appName: `${data?.idVerify?.firstName} ${data.idVerify.lastName}`,
+      productName: applyForOptions.find(
+        (app) => app.value === data?.loan?.applyFor
+      ).label,
+      subDate: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`,
+      status: "In Review",
+    });
+    localStorage.setItem("ALL_APPLICATIONS", JSON.stringify(allData));
+    localStorage.removeItem("CURRENT_APPLICATION");
+    setTimeout(() => {
+      setIsLoading(false);
+      setShowSuccessModal(true);
+      setTimeout(() => {
+        navigate("/my-applications");
+      }, 2000);
+    }, 1000);
+  };
 
-    return (
-        <div id="Income">
-            <div className="Agree">
-                <div className="income_dash">
-                    <ul>
-                        <li><i class="fa fa-circle" aria-hidden="true"></i><Link to={"/profiledetail"}> <h3>Profile Details</h3> </Link></li>
-                        
-                        <li><i class="fa fa-circle" aria-hidden="true"></i> <Link to={"/idverification"}><h3>My Applications</h3></Link></li>
-                        
-                        <li><i class="fa fa-circle" aria-hidden="true"></i> <Link><h3>Inbox</h3></Link></li>
-                        
-                        <li><i class="fa fa-circle" aria-hidden="true"></i><Link> <h3>Settings</h3></Link></li>
-                    </ul>
-                </div>
-                <div className="income_verify">
-                    <div class="general_container">
-                        <div class="general_info">
-                            <div className="agreement_page">
-                                <h2>general information</h2>
-                                <ul class="Verifications">
-                                    <li>
-                                        <div className='verify_image'>
-                                            <i class="fa fa-check" aria-hidden="true"></i>
-                                        </div>
-                                        <div className='verify_text'>
-                                            <p>STEP 01</p>
-                                            <h3>ID Verification</h3>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div className='income_image'>
-                                            <i class="fa fa-check" aria-hidden="true"></i>
-                                        </div>
-                                        <div className='income_text'>
-                                            <p>STEP 02</p>
-                                            <h3>Income</h3>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div className='loan_image'>
-                                            <i class="fa fa-check" aria-hidden="true"></i>
-                                        </div>
-                                        <div className='loan_text'>
-                                            <p>STEP 03</p>
-                                            <h3>Loan Details</h3>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div className='agree_image'>
-                                            <i class="fa fa-check" aria-hidden="true"></i>
-                                        </div>
-                                        <div className='agree_text'>
-                                            <p>STEP 04</p>
-                                            <h3>Agreement & Service Fees</h3>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi morbi sit consectetur elit nibh faucibus morbi. Sed sit eget est lacus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi morbi sit consectetur elit nibh faucibus morbi. Sed sit eget est lacus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Facilisi morbi sit </p>
-                                <div className="download_agree">
-                                    <Link> <img src={download} alt="" /> Download</Link> The Master Agreement
-                                </div>
-                            </div>
-                        </div>
-                        <div className="signpad">
-                            <div className="signpad_inner">
-                                <h2>Signature</h2>
-                                <SignatureCanvas />
-                            </div>
-                            <h2>OR</h2>
-                            {contentList.map((content) => (
-                                content.isVisible && (
-                                <div key={content.id} className="loan_doc1">
-                                    <div className="loan_docs1">
-                                    <input type="file" id={`doc${content.id}`} />
-                                    <div>
-                                        <label htmlFor={`doc${content.id}`}>
-                                        <h2>Upload Document {content.id}</h2>
-                                        <img src={upload} alt="" />
-                                        <h3>
-                                            Drag & drop files or <span>Browser</span>
-                                        </h3>
-                                        <p>
-                                            Supported formats: JPEG, PNG, GIF, MP4, PDF, PSD, AI, Word, PPT
-                                        </p>
-                                        <div>UPLOAD FILES</div>
-                                        </label>
-                                    </div>
+  const renderSummeryData = (summery, shouldBold = false) => (
+    <div
+      className={`${classes.summaryItem} ${
+        shouldBold === true ? classes.bold : ""
+      }`}
+    >
+      <p>{summery.title}</p>
+      <h6>
+        <span>{summery.currency} </span>
+        {summery.amount}
+      </h6>
+    </div>
+  );
 
-                                    </div>
-                                </div>
-                                 )
-                            ))} 
-                        </div>
-                        <div class="service_container">
-                            <div class="services_cont">
-                                <h2>SERVICE FEES</h2>
-                                <div class="service_fees">
-                                    <ul class="service">
-                                        <li>Convenance</li>
-                                        <li>Broker Commission</li>
-                                        <li>Dubai land department fee</li>
-                                        <li>Mortgage Processing  </li>
-                                        <li>Registration Fee</li>
-                                        <li>Valuation</li>
-                                    </ul>
-                                    <ul class="service">
-                                        <li><b>AED</b> 8,000</li>
-                                        <li><b>AED</b> 8,000</li>
-                                        <li><b>AED</b> 8,000</li>
-                                        <li><b>AED</b> 8,000</li>
-                                        <li><b>AED</b> 8,000</li>
-                                        <li><b>AED</b> 8,000</li>
-                                    </ul>
-                                </div>
-                                <div class="service_fees">
-                                    <ul class="service">
-                                        <li>Down Payment</li>
-                                        <li>Total Extra</li>
-                                    </ul>
-                                    <ul class="service">
-                                        <li><b>AED</b> 8,000</li>
-                                        <li><b>AED</b> 8,000</li>
-                                    </ul>
-                                </div>
-                                <div class="service_fees">
-                                    <ul class="service">
-                                        <li>Total Payment</li>
-                                    </ul>
-                                    <ul class="service">
-                                        <li><b>AED</b> 8,000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="payment_cont">
-                                <h2>Payment methods</h2>
-                                <div class="payment_sect">
-                                    <div class="wallet">
-                                        <input type="radio" name="pay_radio"/>
-                                        <div><img src={wallet} alt=""/></div>
-                                        <p>wallet</p>
-                                    </div>
-                                    <p>12,076.63 AED</p>
-                                </div>
-                                <div class="payment_sect">
-                                    <div class="wallet">
-                                        <input type="radio" name="pay_radio"/>
-                                        <div><img src={card} alt=""/></div>
-                                        <p>xxxx-4455</p>-
-                                    </div>
-                                    <input type="text" placeholder="CVV"/>
-                                </div>
-                                <div class="payment_sect">
-                                    <div class="wallet">
-                                        <input type="radio" name="pay_radio"/>
-                                        <div><img src={card} alt=""/></div>
-                                        <p>xxxx-5672</p>
-                                    </div>
-                                    <span><img src={Status} alt=""/></span>
-                                </div>
-                                <div class="payment_sect">
-                                    <div class="wallet">
-                                        <input type="radio" name="pay_radio"/>
-                                        <div><img src={applepay} alt=""/></div>
-                                        <p>Apple Pay</p>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                        </div>
-                        <div class="general_input_sect button_sec">
-                            <div class="input_sect previous_btn">
-                                <Button onClick={handleScroll}>
-                                    <Link to={'/loan'}>Previous</Link>
-                                </Button>
-                            </div>
-                            <div class="input_sect submit_btn">
-                                <Button onClick={handleOpen}>Submit & Next</Button>
-                            </div>
-                        </div>
+  return (
+    <div className={classes.Agree}>
+      <Modal open={showSuccessModal}>
+        <div className={classes.modalContainer}>
+          <div style={{ textAlign: "end", width: "100%" }}>
+            <IconButton onClick={() => setShowSuccessModal(false)}>
+              <svg
+                width="36"
+                height="36"
+                viewBox="0 0 36 36"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M23 13L13 23M13 13L23 23"
+                  stroke="#667085"
+                  stroke-width="1.66667"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </IconButton>
+          </div>
+          <svg
+            width="93"
+            height="92"
+            viewBox="0 0 93 92"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g opacity="0.3">
+              <rect
+                x="11.5"
+                y="11"
+                width="70"
+                height="70"
+                rx="35"
+                stroke="#DBA953"
+                stroke-width="2"
+              />
+            </g>
+            <g opacity="0.1">
+              <rect
+                x="1.5"
+                y="1"
+                width="90"
+                height="90"
+                rx="45"
+                stroke="#DBA953"
+                stroke-width="2"
+              />
+            </g>
+            <path
+              d="M35.9998 46L42.9998 53L56.9998 39M69.8332 46C69.8332 58.8866 59.3865 69.3333 46.4998 69.3333C33.6132 69.3333 23.1665 58.8866 23.1665 46C23.1665 33.1134 33.6132 22.6667 46.4998 22.6667C59.3865 22.6667 69.8332 33.1134 69.8332 46Z"
+              stroke="#DBA953"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
 
-                        <Modal open={open} >
-                            <div className='success_submit'>
-                                <div className="success_submit_inner">
-                                    <div>
-                                        <img src={check} alt="" />
-                                    </div>
-                                    <div className='success_submit_text'>
-                                        <h2>Successfully Submitted</h2>
-                                        <p>
-                                            Your application is successfully submitted, you can track your application status from your dashboard.
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <Link className='rediect' to={"/profiledetail"}><i  class="fa fa-times" aria-hidden="true"></i></Link>
-                                    </div>
-                                </div>
-                            </div>
-                        </Modal>
-                    </div>
-                </div>
-            </div>
+          <h3>Successfully Submitted</h3>
+          <p>
+            Your application is successfully submitted, you can track your
+            application status from your dashboard.
+          </p>
         </div>
-    )
-} 
+      </Modal>
+      <FormScafold step={4} onSubmit={hadnleSubmit} loading={isLoading}>
+        <div style={{ display: "flex", gap: 24 }}>
+          <div style={{ flex: 1 }}>
+            <FormSection title="Sign Agreement">
+              <DocumentViewer
+                title="Document Name Here"
+                description="Document 1 line Description here"
+                btnTitle="View Agreement"
+                documentLink="https://www.africau.edu/images/default/sample.pdf"
+              />
+              <TextInput
+                label="Sign Document"
+                widthFr={1}
+                placeholder="Enter your name to sign document"
+              />
+              <div className={classes.checkboxContainer}>
+                <Checkbox
+                  id="agree"
+                  style={{ color: "#DBA953", borderRadius: "4px" }}
+                />
+                <label htmlFor="agree">
+                  I have read & agree to the agreement
+                </label>
+              </div>
+            </FormSection>
+            <br />
+            {!showAddCardForm ? (
+              <FormSection
+                title="Payment Method"
+                headerButton={{
+                  title: "+ Add new Card",
+                  onClick: () => setShowAddCardForm(true),
+                }}
+              >
+                <PaymentSelect
+                  paymentOptions={paymentOptions}
+                  selectedValue={selectedPayment}
+                  onChange={setSelectedPayment}
+                />
+              </FormSection>
+            ) : (
+              <FormSection
+                title="Payment Method"
+                headerButton={{
+                  title: "X Cancel",
+                  onClick: () => setShowAddCardForm(false),
+                }}
+              >
+                <TextInput
+                  label="Card Holder’s Name"
+                  widthFr={0.51}
+                  placeholder="Enter name on the card"
+                />
+                <TextInput
+                  label="Card Number"
+                  widthFr={0.51}
+                  placeholder="Enter 16 Digit Card Number"
+                />
+                <div
+                  style={{
+                    width: "50%",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <TextInput
+                    label="Expiry Date"
+                    widthFr={0.5}
+                    placeholder="MM/YY"
+                  />
+                  <TextInput
+                    label="CVV"
+                    widthFr={0.5}
+                    placeholder="Security Code"
+                    type="password"
+                  />
+                </div>
+              </FormSection>
+            )}
+          </div>
+          <div style={{ minWidth: "30%" }}>
+            <FormSection title="Payment Summary">
+              <div style={{ width: "100%" }}>
+                {summeryData.map(renderSummeryData)}
+                <hr />
+                {renderSummeryData({
+                  title: "Down Payment",
+                  amount: "8,000",
+                  currency: "AED",
+                })}
+                {renderSummeryData({
+                  title: "Total Extra",
+                  amount: "8,000",
+                  currency: "AED",
+                })}
+                <div className={classes.totalSeparator} />
+                {renderSummeryData(
+                  { title: "Total Payment", amount: "8,000", currency: "AED" },
+                  true
+                )}
+              </div>
+            </FormSection>
+          </div>
+        </div>
+      </FormScafold>
+    </div>
+  );
+}

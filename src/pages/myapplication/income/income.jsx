@@ -1,202 +1,206 @@
-import './income.css';
+import { useNavigate } from "react-router-dom";
+import "./income.css";
 
-import { Link } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { useState } from "react";
+import FormScafold from "../../../components/form_scafold/form_scafold";
+import FormSection from "../../../components/form_section/form_section";
+import TextInput from "../../../components/text_input/text_input";
+import SelectInput from "../../../components/select_input/select_input";
+import CurrencyInput from "../../../components/currency_input/currency_input";
+import RadioInput from "../../../components/radio_input/radio_input";
 
+const fieldWidthFr = 0.33;
+const industries = [
+  "Aviation",
+  "Energy",
+  "Oil and Gas",
+  "Construction and Real Estate",
+  "Tourism and Hospitality",
+  "Finance and Banking",
+  "Information Technology (IT)",
+  "Healthcare",
+  "Education",
+  "Telecommunications",
+  "Retail",
+  "Media and Entertainment",
+  "Legal Services",
+  "Automotive Industry",
+  "Renewable Energy",
+  "Logistics and Supply Chain",
+  "Human Resources and Recruitment",
+  "Manufacturing",
+  "Environmental and Sustainability",
+];
 
+const empStatuses = ["Employed", "Self Employed", "Student", "Retired"];
 
 export default function Income() {
-    const handleScroll = () => {
-        window.scrollTo(0, 0);
-    }
+  const [formData, setFormData] = useState({ clientType: 1 });
+  const [isLoading, setIsLoading] = useState(false);
 
-    return (
-        <div id="Income">
-            <div className="Income">
-                <div className="income_dash">
-                    <ul>
-                        <li><i class="fa fa-circle" aria-hidden="true"></i><Link to={"/profiledetail"}> <h3>Profile Details</h3> </Link></li>
-                        
-                        <li><i class="fa fa-circle" aria-hidden="true"></i> <Link to={"/idverification"}><h3>My Applications</h3></Link></li>
-                        
-                        <li><i class="fa fa-circle" aria-hidden="true"></i> <Link><h3>Inbox</h3></Link></li>
-                        
-                        <li><i class="fa fa-circle" aria-hidden="true"></i><Link> <h3>Settings</h3></Link></li>
-                    </ul>
-                </div>
-                <div className="income_verify">
-                    <div class="general_container">
-                        <div class="general_info">
-                            <h1>general information</h1>
-                            <ul class="Verifications">
-                                <li>
-                                    <div className='verify_image'>
-                                        <i class="fa fa-check" aria-hidden="true"></i>
-                                    </div>
-                                    <div className='verify_text'>
-                                        <p>STEP 01</p>
-                                        <h3>ID Verification</h3>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className='income_image'>
-                                        <i class="fa fa-check" aria-hidden="true"></i>
-                                    </div>
-                                    <div className='income_text'>
-                                        <p>STEP 02</p>
-                                        <h3>Income</h3>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className='loan_image'>
-                                        {/* <i class="fa fa-check" aria-hidden="true"></i> */}
-                                    </div>
-                                    <div className='loan_text'>
-                                        <p>STEP 03</p>
-                                        <h3>Loan Details</h3>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div className='agree_image'>
-                                        {/* <i class="fa fa-check" aria-hidden="true"></i> */}
-                                    </div>
-                                    <div className='agree_text'>
-                                        <p>STEP 04</p>
-                                        <h3>Agreement & Service Fees</h3>
-                                    </div>
-                                </li>
-                            </ul>
-                            <div class="general_input_sect">
-                                <div class="input_sect">
-                                    <p>company <sup>*</sup> </p>
-                                    <input type="text" placeholder="nurtur spark digital"/>
-                                </div>
-                                <div class="input_sect">
-                                    <p>job title<sup>*</sup> </p>
-                                    <input type="text" placeholder="doctor phd"/>
-                                </div>
-                            </div>
-                            <div class="general_input_sect">
-                                <div class="input_sect">
-                                    <p>industry <sup>*</sup></p>
-                                    <div class="input_icons">
-                                        <input type="text" placeholder="ERP solutions"/>
-                                        <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                                <div class="input_sect">
-                                    <p>employment status<sup>*</sup> </p>
-                                    <div class="input_icons">
-                                        <input type="text" placeholder="employee at a company"/>
-                                        <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="general_input_sect">
-                                <div class="input_sect">
-                                    <p>joining date <sup>*</sup> </p>
-                                    <input type="date"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="general_info">
-                            <h1>civil status</h1>
-                            <div class="general_input_sect">
-                                <div class="input_sect">
-                                    <p>merital status <sup>*</sup> </p>
-                                <div class="input_icons">
-                                        <input type="text" placeholder="married"/>
-                                        <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                </div>
-                                </div>
-                                <div class="input_sect">
-                                    <p>spouse name<sup>*</sup> </p>
-                                    <input type="text" placeholder="sai vishnu"/>
-                                </div>
-                            </div>
-                            <div class="general_input_sect">
-                                <div class="input_sect">
-                                    <p>Number of Dependents <sup>*</sup> </p>
-                                    <div class="input_icons">
-                                        <input type="text" placeholder="0"/>
-                                        <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="general_info">
-                            <h1>Income</h1>
-                            <div class="general_input_sect">
-                                <div class="input_sect">
-                                    <p>Monthly Income<sup>*</sup> </p>
-                                    <div class="input_icons">
-                                        <input type="text"  placeholder=" AED 30,000 " />
-                                    </div>
-                                </div>
-                                <div class="input_sect">
-                                    <p>Monthly Expense<sup>*</sup> </p>
-                                    <div class="input_icons">
-                                        <input type="text"  placeholder=" AED 15,000 " />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="general_info">
-                            <h1>Beneficiary Details</h1>
-                            <div class="general_input_sect">
-                                <div class="input_sect">
-                                    <div class="radio_sect">
-                                        <input type="radio" name="checked" id="radio"/>
-                                        <label for="radio">
-                                            <h4>Individual Client</h4>
-                                            <p>Lorem opsmep bsnjsui, snm</p>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="input_sect">
-                                    <div class="radio_sect">
-                                        <input type="radio" name="checked" id="radio"/>
-                                        <label for="radio">
-                                            <h4>Corporate Client</h4>
-                                            <p>Lorem opsmep bsnjsui, snm</p>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="general_input_sect">
-                                <div class="input_sect">
-                                    <p>Trade License<sup>*</sup> </p>
-                                    <input type="text" placeholder="122332232322323"/>
-                                </div>
-                                <div class="input_sect">
-                                    <p>Trade Expiry Date<sup>*</sup> </p>
-                                    <input type="text" placeholder="15/01/2026"/>
-                                </div>
-                            </div>
-                            <div class="general_input_sect">
-                                <div class="input_sect">
-                                    <p>Work Email<sup>*</sup> </p>
-                                    <input type="text" placeholder="garyp@example.com"/>
-                                </div>
-                                <div class="input_sect">
-                                    <p>Work Phone Numbe<sup>*</sup> </p>
-                                    <input type="text" placeholder="(123) 456 - 7890"/>
-                                </div>
-                            </div>
-                            <div class="general_input_sect button_sec">
-                                <div class="input_sect previous_btn">
-                                    <Button onClick={handleScroll}><Link to={"/idverification"}>Previous</Link></Button>
-                                </div>
-                                <div class="input_sect submit_btn">
-                                    <Button onClick={handleScroll}>
-                                        <Link to={'/loan'}>Submit & Next</Link>
-                                    </Button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
-} 
+  const navigate = useNavigate();
+
+  const hadnleSubmit = () => {
+    setIsLoading(true);
+    const data = JSON.parse(localStorage.getItem("CURRENT_APPLICATION"));
+    data.income = formData;
+    localStorage.setItem("CURRENT_APPLICATION", JSON.stringify(data));
+    setTimeout(() => {
+      setIsLoading(false);
+      navigate("/loan");
+    }, 2000);
+  };
+
+  const handleFieldChange = (id, value) => {
+    setFormData((_formData) => ({ ..._formData, [id]: value }));
+  };
+
+  return (
+    <div className="Income">
+      <FormScafold step={2} onSubmit={hadnleSubmit} loading={isLoading}>
+        <FormSection title="Beneficiary Details">
+          <RadioInput
+            id="clientType"
+            value={formData["clientType"]}
+            onChange={handleFieldChange}
+            options={[
+              {
+                value: 1,
+                title: "Individual Client",
+              },
+              {
+                value: 2,
+                title: "Corporate Client",
+              },
+            ]}
+          />
+          {formData.clientType === 2 && (
+            <>
+              <TextInput
+                id="workPn"
+                label="Work Phone Number"
+                widthFr={fieldWidthFr}
+                placeholder="(123) 456 - 7890"
+              />
+              <TextInput
+                id="workEmail"
+                label="Work Email Address"
+                widthFr={fieldWidthFr}
+                placeholder="abc@example.com"
+              />
+              <TextInput
+                id="tradeLicenseNo"
+                label="Trade License Number"
+                widthFr={fieldWidthFr}
+                placeholder="123456789"
+              />
+              <TextInput
+                id="vatRegistrationNo"
+                label="VAT Registration Number"
+                widthFr={fieldWidthFr}
+                placeholder="123456789"
+              />
+            </>
+          )}
+        </FormSection>
+        <br />
+        <FormSection title="General Information">
+          <TextInput
+            id="company"
+            label="Company"
+            widthFr={fieldWidthFr}
+            value={formData.company}
+            onChange={handleFieldChange}
+          />
+          <TextInput id="jobTitle" label="Job Title" widthFr={fieldWidthFr} />
+          <SelectInput
+            id="industry"
+            label="Industry"
+            widthFr={fieldWidthFr}
+            options={industries.map((industry) => ({
+              value: industry,
+              label: industry,
+            }))}
+            value={formData.industry}
+            onChange={handleFieldChange}
+          />
+          <SelectInput
+            id="empStatus"
+            label="Employment Status"
+            widthFr={fieldWidthFr}
+            options={empStatuses.map((emp) => ({ value: emp, label: emp }))}
+            value={formData.empStatus}
+            onChange={handleFieldChange}
+          />
+          <TextInput
+            id="joinDate"
+            label="Joining Date"
+            widthFr={fieldWidthFr}
+            type="date"
+            value={formData.joinDate}
+            onChange={handleFieldChange}
+          />
+        </FormSection>
+        <br />
+        <FormSection title="Civil Status">
+          <SelectInput
+            id="maritalStatus"
+            label="Marital Status"
+            widthFr={fieldWidthFr}
+            options={[
+              { value: "married", label: "Married" },
+              { value: "single", label: "Single" },
+            ]}
+            value={formData.maritalStatus}
+            onChange={handleFieldChange}
+          />
+          <TextInput
+            id="spouseName"
+            label="Spouse Name"
+            widthFr={fieldWidthFr}
+            value={formData.spouseName}
+            onChange={handleFieldChange}
+          />
+          <SelectInput
+            id="noOfDepend"
+            label="Number of Dependencies"
+            widthFr={fieldWidthFr}
+            editable
+            options={[
+              { value: 0, label: "0" },
+              { value: 1, label: "1" },
+              { value: 2, label: "2" },
+              { value: 3, label: "3" },
+              { value: 4, label: "4" },
+              { value: 5, label: "5" },
+              { value: 6, label: "6" },
+              { value: 7, label: "7" },
+              { value: 8, label: "8" },
+              { value: 9, label: "9" },
+              { value: 10, label: "10" },
+            ]}
+            value={formData.noOfDepend}
+            onChange={handleFieldChange}
+          />
+        </FormSection>
+        <br />
+        <FormSection title="Income">
+          <CurrencyInput
+            id="monthlyIncome"
+            label="Monthly Income"
+            widthFr={fieldWidthFr}
+            value={formData.monthlyIncome}
+            onChange={handleFieldChange}
+          />
+          <CurrencyInput
+            id="monthlyExpenses"
+            label="Monthly Expenses"
+            widthFr={fieldWidthFr}
+            value={formData.monthlyExpenses}
+            onChange={handleFieldChange}
+          />
+        </FormSection>
+      </FormScafold>
+    </div>
+  );
+}

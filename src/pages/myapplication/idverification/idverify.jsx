@@ -1,171 +1,147 @@
-import './idverify.css';
+import "./idverify.css";
 
-import { Link } from 'react-router-dom';
-import upload from '../../images/upload.png';
-import scan from '../../images/scan.png';
-import { Button } from '@mui/material';
-import { useState } from 'react';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import FormScafold from "../../../components/form_scafold/form_scafold";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import FormSection from "../../../components/form_section/form_section";
+import FileInput from "../../../components/file_input/file_input";
+import TextInput from "../../../components/text_input/text_input";
+import SelectInput from "../../../components/select_input/select_input";
 
 export default function Idverification() {
+  const [formData, setFormData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
-    // const [scroll, useScroll] = useState("");
+  const navigate = useNavigate();
 
-    const handleScroll = () => {
-        window.scrollTo(0, 0);
-    }
+  const hadnleSubmit = () => {
+    setIsLoading(true);
+    localStorage.setItem(
+      "CURRENT_APPLICATION",
+      JSON.stringify({ idVerify: formData })
+    );
+    setTimeout(() => {
+      setIsLoading(false);
+      navigate("/income");
+    }, 2000);
+  };
 
-    return (
-        <div id="idverfication">
-            <div className="Idverification">
-                <div className="verify_dash">
-                    <ul>
-                        <li><i class="fa fa-circle" aria-hidden="true"></i><Link to={"/profiledetail"}> <h3>Profile Details</h3> </Link></li>
-                        
-                        <li><i class="fa fa-circle" aria-hidden="true"></i> <Link to={"/idverification"}><h3>My Applications</h3></Link></li>
-                        
-                        <li><i class="fa fa-circle" aria-hidden="true"></i> <Link><h3>Inbox</h3></Link></li>
-                        
-                        <li><i class="fa fa-circle" aria-hidden="true"></i><Link> <h3>Settings</h3></Link></li>
-                    </ul>
-                </div>
-                <div class="container">
-                    <h1>New Application</h1>
-                    <ul class="Verifications">
-                        <li>
-                            <div className='verify_image'>
-                                <i class="fa fa-check" aria-hidden="true"></i>
-                            </div>
-                            <div className='verify_text'>
-                                <p>STEP 01</p>
-                                <h3>ID Verification</h3>
-                            </div>
-                        </li>
-                        <li>
-                            <div className='income_image'>
-                                {/* <i class="fa fa-check" aria-hidden="true"></i> */}
-                            </div>
-                            <div className='income_text'>
-                                <p>STEP 02</p>
-                                <h3>Income</h3>
-                            </div>
-                        </li>
-                        <li>
-                            <div className='loan_image'>
-                                {/* <i class="fa fa-check" aria-hidden="true"></i> */}
-                            </div>
-                            <div className='loan_text'>
-                                <p>STEP 03</p>
-                                <h3>Loan Details</h3>
-                            </div>
-                        </li>
-                        <li>
-                            <div className='agree_image'>
-                                {/* <i class="fa fa-check" aria-hidden="true"></i> */}
-                            </div>
-                            <div className='agree_text'>
-                                <p>STEP 04</p>
-                                <h3>Agreement & Service Fees</h3>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="income verify_chart">
-                        <div className='income_title idverify' >
-                            <h3>In order to fitch your information</h3>
-                                <div className='verify_scan'>
-                                    <div>
-                                        <input type="file" name="" id="scan" />
-                                        <label htmlFor="scan"><img src={scan} alt="" /> <h4><span>Scan</span> Your ID</h4></label>
-                                    </div>
-                                </div>
+  useEffect(() => {
+    localStorage.setItem("CURRENT_APPLICATION", {});
+  }, []);
 
-                                <h3>OR</h3>
+  const handleIdImageChange = (id, image) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setFormData({
+        [id]: image,
+        firstName: "Peter",
+        lastName: "DSouza",
+        resStatus: 1,
+        emIdNo: "1232132312321321",
+        nationality: "in",
+        dob: "1990-01-01",
+      });
+      setIsLoading(false);
+    }, 2000);
+  };
 
-                                <div className="verify_upload">
-                                    <div>
-                                        <input type="file" id='upload'/>
-                                        <label htmlFor="upload"><img src={upload} alt="" /> <h4><span>Upload</span> Your ID</h4></label>
-                                    </div>
-                                </div>
-                        </div>
-                        
-                    </div>
+  const handleFieldChange = (id, value) => {
+    setFormData((_formData) => ({ ..._formData, [id]: value }));
+  };
 
-
-                    <div class="chart">
-                        <div class="employment-status">
-                            <label class="inbild-head">First Name</label>
-                            <div class="title">
-                                <input type="email" placeholder="Peter" class="first-input" />
-                            </div>
-                        </div>
-                        <div class="job-title">
-                            <label class="inbild-head">last Name</label>
-                            <div class="title">
-                                <input type="text" placeholder="DSouza" class="first-input" />
-                            </div>
-                        </div>
-                        <div class="employment-status">
-                            <label class="inbild-head">Residency Status <sub></sub> </label>
-                            <div class="title">
-                                <select>
-                                    <option value="">option 1</option>
-                                    <option value="">option 2</option>
-                                    <option value="">option 3</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="date-joining">
-                            <label class="inbild-head">Emirates ID Number</label>
-                            <div class="input-parent">
-
-                                <input placeholder="12345678" type="number" class="sec-input" />
-                            </div>
-                        </div>
-                        <div class="job-title">
-                            <label class="inbild-head">Nationality</label>
-                            <div class="title">
-                                <input type="text" placeholder="MyEmirates.png" class="first-input" />
-                            </div>
-                        </div>
-                        
-                        <div class="employment-status">
-                            <label class="inbild-head">Phone Number</label>
-                            <div class="title">
-                                <input type="email" placeholder="(123) 456 - 7890 " class="first-input" />
-                            </div>
-                        </div>
-                        <div class="job-title">
-                            <label class="inbild-head">Date of Birth</label>
-                            <div class="title">
-                                <input type="date" placeholder="15-January-2026" class="first-input" />
-                            </div>
-                        </div>
-                        <div class="date-joining">
-                            <label class="inbild-head">Email</label>
-                            <div class="input-parent">
-                                <input placeholder="abc@xyz.com" type="email" class="sec-input" />
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <div class="check-box igree">
-                        <input type="checkbox" />
-                        <p>By continuing you accept our <a href="">Terms of Service</a>. Also learn how we process your data in our <a href="">Privacy Policy</a> and <a href="">Cookies policy</a>.</p>
-                    </div>
-                    <div class="btn-parent">
-                        
-                    </div>
-                    <div class="input_sect submit_btn">
-                        <Button onClick={handleScroll}>
-                            <Link to={"/income"}>Submit & Next</Link>
-                        </Button>           
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className="Idverification">
+      <FormScafold step={1} onSubmit={hadnleSubmit} loading={isLoading}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 2fr",
+            gap: "24px",
+            // maxWidth: "1492px",
+            // margin: "0 auto",
+          }}
+        >
+          <FormSection title="Upload Emirates ID">
+            <FileInput
+              id="emirateId"
+              value={formData["emirateId"]}
+              onChange={handleIdImageChange}
+            />
+          </FormSection>
+          <FormSection title="Personal Information">
+            <TextInput
+              id="firstName"
+              label="First Name *"
+              widthFr={0.5}
+              placeholder="Jone"
+              value={formData["firstName"]}
+              onChange={handleFieldChange}
+            />
+            <TextInput
+              id="lastName"
+              label="Last Name *"
+              widthFr={0.5}
+              placeholder="Doe"
+              value={formData["lastName"]}
+              onChange={handleFieldChange}
+            />
+            <SelectInput
+              id="resStatus"
+              label="Residency Status *"
+              widthFr={0.5}
+              options={[
+                { value: 1, label: "Resident" },
+                { value: 2, label: "Temp" },
+              ]}
+              value={formData["resStatus"]}
+              onChange={handleFieldChange}
+            />
+            <TextInput
+              id="emIdNo"
+              label="Emirates ID Number *"
+              widthFr={0.5}
+              value={formData["emIdNo"]}
+              onChange={handleFieldChange}
+            />
+            <SelectInput
+              id="nationality"
+              label="Nationality *"
+              widthFr={0.5}
+              options={[
+                { value: "in", label: "India" },
+                { value: "uae", label: "UAE" },
+              ]}
+              value={formData["nationality"]}
+              onChange={handleFieldChange}
+            />
+            <TextInput
+              id="pnNum"
+              label="Phone Number *"
+              widthFr={0.5}
+              placeholder="(123) 456 - 7890"
+              value={formData["pnNum"]}
+              onChange={handleFieldChange}
+            />
+            <TextInput
+              id="dob"
+              label="Date of Birth *"
+              widthFr={0.5}
+              type="date"
+              value={formData["dob"]}
+              onChange={handleFieldChange}
+            />
+            <TextInput
+              id="email"
+              label="Email *"
+              widthFr={0.5}
+              placeholder="abc@example.com"
+              value={formData["email"]}
+              onChange={handleFieldChange}
+            />
+          </FormSection>
         </div>
-    )
-} 
+      </FormScafold>
+    </div>
+  );
+}
